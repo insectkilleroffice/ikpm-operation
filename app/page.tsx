@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { connection } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { signedInUser } from "@/lib/supabase/user";
 import { signOut } from "./actions";
 import VisitPlanner from "./VisitPlanner";
 
@@ -13,22 +14,22 @@ export default function Home() {
   );
 }
 
-/** Only operations managers and admins can open the planner. */
+/** Only operations managers open the planner. Each one sees only the sites admin gave them. */
 async function Gate() {
   await connection();
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await signedInUser(supabase);
   if (!user) redirect("/login");
 
   const { data: me } = await supabase.from("profiles").select("full_name, role").eq("id", user.id).maybeSingle();
-  if (me?.role !== "operations" && me?.role !== "admin") {
+  if (me?.role !== "operations") {
     return (
       <main style={{ minHeight: "100vh", display: "grid", placeItems: "center", padding: 16, textAlign: "center" }}>
         <div className="panel">
           <h2>Operations only</h2>
-          <p>{user.email} is not an operations account.</p>
+          <p>
+            {user.email} {me ? `is a ${me.role} account.` : "has no staff profile yet."} Only operations managers can use this portal.
+          </p>
           <form action={signOut}>
             <button className="btn alt">Sign out</button>
           </form>

@@ -25,11 +25,21 @@ export default function LoginPage() {
       return setError(error?.message ?? "Sign in failed");
     }
 
-    const { data: profile } = await supabase.from("profiles").select("role").eq("id", data.user.id).maybeSingle();
-    if (profile?.role !== "operations" && profile?.role !== "admin") {
+    // Only operations managers use this portal.
+    const { data: profile, error: profileError } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", data.user.id)
+      .maybeSingle();
+    if (profile?.role !== "operations") {
       await supabase.auth.signOut();
       setLoading(false);
-      return setError("This account is not an operations manager.");
+      if (profileError) return setError(`Could not read your profile: ${profileError.message}`);
+      if (!profile)
+        return setError(
+          "This login has no staff profile yet. Ask the admin to add you in public.profiles with the role 'operations'.",
+        );
+      return setError(`This account's role is '${profile.role}'. Only operations managers can sign in here.`);
     }
 
     router.replace("/");
