@@ -1,10 +1,12 @@
 "use client";
 
 import { useEffect } from "react";
+import { createClient } from "@/lib/supabase/client";
 import { mountVisitPlanner } from "@/lib/visit-planner";
+import { signOut } from "./actions";
 
-export default function VisitPlanner() {
-  useEffect(() => mountVisitPlanner(), []);
+export default function VisitPlanner({ name }: { name: string }) {
+  useEffect(() => mountVisitPlanner(createClient()), []);
 
   return (
     <>
@@ -13,9 +15,14 @@ export default function VisitPlanner() {
           <b>IKPM Operations</b>
           <span id="today"></span>
         </div>
-        <button type="button" className="link" data-a="reset">
-          Start over with sample data
-        </button>
+        <span className="note" style={{ marginBottom: 6 }}>
+          {name}
+        </span>
+        <form action={signOut}>
+          <button type="submit" className="link">
+            Sign out
+          </button>
+        </form>
       </header>
       <div className="layout" id="layout">
         <aside className="side" id="side" aria-label="Clients and sites"></aside>

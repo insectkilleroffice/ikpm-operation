@@ -225,7 +225,7 @@ h1,h2,h3,p{margin:0;text-wrap:balance}
 .fld{display:flex;flex-direction:column;gap:5px;min-width:0}
 .fld>label,.fld>.lb{font-weight:600}
 .fld small{color:var(--mute)}
-.fld input[type=text],.fld input[type=number],.fld input[type=date],.fld input[type=month],.fld input[type=time],.fld input[type=tel],.fld select,.fld textarea,.rowx input[type=text],.rowx input[type=number],.rowx select{background:#fff;border:2px solid var(--line);border-radius:10px;padding:9px 12px;width:100%;min-height:46px}
+.fld input[type=text],.fld input[type=number],.fld input[type=date],.fld input[type=month],.fld input[type=time],.fld input[type=tel],.fld input[type=email],.fld input[type=password],.fld select,.fld textarea,.rowx input[type=text],.rowx input[type=number],.rowx select{background:#fff;border:2px solid var(--line);border-radius:10px;padding:9px 12px;width:100%;min-height:46px}
 .fld textarea{min-height:90px;resize:vertical}
 .fld input:focus,.fld select:focus,.fld textarea:focus,.rowx input:focus,.rowx select:focus{border-color:var(--ink);outline:none}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
